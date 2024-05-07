@@ -1,5 +1,6 @@
 package io.waveguide.social_media.comment;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,10 +14,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class UpdateCommentRequest {
 
-    @Id
+    @NotBlank(message = "CommentId is required")
     private ObjectId commentId;
 
+    @NotBlank(message = "Comment message is required")
     private String message;
+
+    @NotBlank(message = "PostId is required")
     private ObjectId postId;
+
+    @NotBlank(message = "UserId is required")
     private ObjectId userId;
 }
