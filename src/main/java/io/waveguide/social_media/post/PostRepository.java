@@ -10,7 +10,7 @@ public interface PostRepository extends MongoRepository<Post, String> {
 
     Post deleteByPostId(String postId);
 
-    List<Post> findByUsername(String postIs, Pageable pageable);
+    List<Post> findByUserId(String userId, Pageable pageable);
 
-    User findByPostId(String postId);
+    Post findByPostId(String postId);
 }
