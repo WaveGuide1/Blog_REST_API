@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class UpdatePostRequest {
 
     @NotBlank(message = "PostId is required")
-    private ObjectId postId;
+    private String postId;
 
     @NotBlank(message = "Post title is required")
     private String title;
@@ -30,5 +30,5 @@ public class UpdatePostRequest {
     private Boolean published;
 
     @NotBlank(message = "UserId is required")
-    private ObjectId userId;
+    private String userId;
 }

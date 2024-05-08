@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class PostResponse {
 
     @Id
-    private ObjectId postId;
+    private String postId;
 
     private String title;
     private String body;

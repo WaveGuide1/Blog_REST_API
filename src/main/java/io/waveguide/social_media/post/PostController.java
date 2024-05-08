@@ -45,11 +45,9 @@ public class PostController {
     @PostMapping("/")
     public ResponseEntity<GeneralResponseEntity<Post>> createPost(@Valid
                                                                   @RequestBody CreatePostRequest request){
-        Post post = new Post();
         GeneralResponseEntity<Post> generalResponseEntity = new GeneralResponseEntity<>();
         try {
-            BeanUtils.copyProperties(request, post);
-            Post createdPost = postService.createPost(post);
+            Post createdPost = postService.createPost(request);
             generalResponseEntity.setMessage("Post created successfully");
             generalResponseEntity.setInfo(createdPost);
             return ResponseEntity.ok(generalResponseEntity);
@@ -62,11 +60,9 @@ public class PostController {
     @PutMapping("/")
     public ResponseEntity<GeneralResponseEntity<Post>> updatePost(@Valid
                                                                   @RequestBody UpdatePostRequest request) {
-        Post post = new Post();
         GeneralResponseEntity<Post> generalResponseEntity = new GeneralResponseEntity<>();
         try {
-            BeanUtils.copyProperties(request, post);
-            Post updatedPost = postService.updatePost(post);
+            Post updatedPost = postService.updatePost(request);
             generalResponseEntity.setMessage("Post updated successfully");
             generalResponseEntity.setInfo(updatedPost);
             return ResponseEntity.ok(generalResponseEntity);
@@ -76,7 +72,7 @@ public class PostController {
 
     }
 
-    @GetMapping("/{postId)")
+    @GetMapping("/{postId}")
     public ResponseEntity<GeneralResponseEntity<Post>> getPost(@Valid
                                                                   @PathVariable String postId) {
         Post post = new Post();
