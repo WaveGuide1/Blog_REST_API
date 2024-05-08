@@ -25,6 +25,6 @@ public class CreatePostRequest {
     private Boolean published;
 
     @NotBlank(message = "UserId is required")
-    private ObjectId userId;
+    private String userId;
 
 }

@@ -2,11 +2,13 @@ package io.waveguide.social_media.post;
 
 import io.waveguide.social_media.utils.GeneralPaginationRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Pageable;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -15,11 +17,17 @@ public class PostService {
 
     private final PostRepository postRepository;
 
-    public Post createPost(Post post) throws Exception{
+    public Post createPost(CreatePostRequest request) throws Exception{
+        Post post = new Post();
+        BeanUtils.copyProperties(request, post);
+        post.setCreateAt(LocalDateTime.now());
         return postRepository.save(post);
     }
 
-    public Post updatePost(Post post) throws Exception{
+    public Post updatePost(UpdatePostRequest request) throws Exception{
+        Post post = postRepository.findByPostId(request.getPostId());
+        BeanUtils.copyProperties(request, post);
+        post.setUpdatedAt(LocalDateTime.now());
         return postRepository.save(post);
     }
 
