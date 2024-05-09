@@ -5,8 +5,8 @@ import io.waveguide.social_media.utils.GeneralPaginationRequest;
 import io.waveguide.social_media.utils.GeneralResponseEntity;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @Validated
 @RequestMapping("/api/v1/posts")
 public class PostController {
@@ -47,6 +48,7 @@ public class PostController {
     @PostMapping("/")
     public ResponseEntity<GeneralResponseEntity<Post>> createPost(@Valid
                                                                   @RequestBody CreatePostRequest request){
+        log.info("PostController: Received a request with body : {} ", request.toString());
         GeneralResponseEntity<Post> generalResponseEntity = new GeneralResponseEntity<>();
         try {
             Post createdPost = postService.createPost(request);
