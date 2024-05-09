@@ -1,10 +1,12 @@
 package io.waveguide.social_media.post;
 
+import io.waveguide.social_media.exception.RecordNotFoundException;
 import io.waveguide.social_media.utils.GeneralPaginationRequest;
 import io.waveguide.social_media.utils.GeneralResponseEntity;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @Validated
 @RequestMapping("/api/v1/posts")
 public class PostController {
@@ -45,6 +48,7 @@ public class PostController {
     @PostMapping("/")
     public ResponseEntity<GeneralResponseEntity<Post>> createPost(@Valid
                                                                   @RequestBody CreatePostRequest request){
+        log.info("PostController: Received a request with body : {} ", request.toString());
         GeneralResponseEntity<Post> generalResponseEntity = new GeneralResponseEntity<>();
         try {
             Post createdPost = postService.createPost(request);
@@ -63,10 +67,15 @@ public class PostController {
         GeneralResponseEntity<Post> generalResponseEntity = new GeneralResponseEntity<>();
         try {
             Post updatedPost = postService.updatePost(request);
+            if (ObjectUtils.isEmpty(updatedPost)) throw new RecordNotFoundException("Not Found");
+
             generalResponseEntity.setMessage("Post updated successfully");
             generalResponseEntity.setInfo(updatedPost);
             return ResponseEntity.ok(generalResponseEntity);
-        } catch (Exception ex) {
+        } catch (RecordNotFoundException ex) {
+            throw ex;
+        }
+        catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 

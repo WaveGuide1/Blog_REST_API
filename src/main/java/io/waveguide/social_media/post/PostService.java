@@ -2,6 +2,7 @@ package io.waveguide.social_media.post;
 
 import io.waveguide.social_media.utils.GeneralPaginationRequest;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -26,6 +27,7 @@ public class PostService {
 
     public Post updatePost(UpdatePostRequest request) throws Exception{
         Post post = postRepository.findByPostId(request.getPostId());
+        if(ObjectUtils.isEmpty(post)) return null;
         BeanUtils.copyProperties(request, post);
         post.setUpdatedAt(LocalDateTime.now());
         return postRepository.save(post);
