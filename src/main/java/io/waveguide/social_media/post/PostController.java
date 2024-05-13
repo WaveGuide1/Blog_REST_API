@@ -48,7 +48,6 @@ public class PostController {
     @PostMapping("/")
     public ResponseEntity<GeneralResponseEntity<Post>> createPost(@Valid
                                                                   @RequestBody CreatePostRequest request){
-        log.info("PostController: Received a request with body : {} ", request.toString());
         GeneralResponseEntity<Post> generalResponseEntity = new GeneralResponseEntity<>();
         try {
             Post createdPost = postService.createPost(request);
@@ -64,6 +63,7 @@ public class PostController {
     @PutMapping("/")
     public ResponseEntity<GeneralResponseEntity<Post>> updatePost(@Valid
                                                                   @RequestBody UpdatePostRequest request) {
+
         GeneralResponseEntity<Post> generalResponseEntity = new GeneralResponseEntity<>();
         try {
             Post updatedPost = postService.updatePost(request);
@@ -72,10 +72,11 @@ public class PostController {
             generalResponseEntity.setMessage("Post updated successfully");
             generalResponseEntity.setInfo(updatedPost);
             return ResponseEntity.ok(generalResponseEntity);
+
         } catch (RecordNotFoundException ex) {
             throw ex;
-        }
-        catch (Exception ex) {
+
+        } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
