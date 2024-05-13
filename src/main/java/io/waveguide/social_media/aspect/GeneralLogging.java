@@ -3,8 +3,6 @@ package io.waveguide.social_media.aspect;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Aspect
@@ -12,14 +10,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class GeneralLogging {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Pointcut("execution(* io.waveguide.social_media.post.*.*(..))")
     public void loggingPointcut(){}
 
     @Before("loggingPointcut()")
     public void beforeExecution(JoinPoint joinpoint){
-        logger.info("Entering method: {} with arguments: {} ,Class Name:{}",
+        log.info("Entering method: {} with arguments: {} ,Class Name:{}",
                 joinpoint.getSignature().getName(), joinpoint.getArgs(),
                 joinpoint.getSignature().getDeclaringTypeName());
 
@@ -27,14 +24,14 @@ public class GeneralLogging {
 
     @AfterReturning(value = "loggingPointcut()", returning = "result")
     public void afterExecutionJoinPoint(JoinPoint joinpoint, Object result){
-        logger.info("Exiting method: {} ,with result: {} ,Class Name:{}",
+        log.info("Exiting method: {} ,with result: {} ,Class Name:{}",
                 joinpoint.getSignature().getName(), result,
                 joinpoint.getSignature().getDeclaringTypeName());
 
     }
 
-    @AfterThrowing(pointcut = "loggingPointcut()", throwing = "e")
+    @AfterThrowing(pointcut = "execution(* io.waveguide.social_media.exception.*.*(..))", throwing = "e")
     public void afterException(JoinPoint joinpoint, Exception e){
-        logger.info("After method {} :: ,was invoked from class {} :: ", e.getMessage(), e.getClass());
+        log.debug("After method {} :: ,was invoked from class {} :: ", e.getMessage(), e.getClass());
     }
 }
