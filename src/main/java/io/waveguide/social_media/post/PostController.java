@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -24,23 +25,15 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("/")
-    public ResponseEntity<GeneralResponseEntity<Post>> getPosts(@Valid
+    public ResponseEntity<Page<Post>> getPosts(@Valid
                                                                 @RequestParam(defaultValue = "0") Integer pageNo,
                                                                 @RequestParam(defaultValue = "10") Integer pageSize,
-                                                                @RequestParam(defaultValue = "id") String sortBy,
-                                                                @RequestParam(defaultValue = "0") String userId) throws Exception {
-        GeneralResponseEntity<Post> generalResponseEntity = new GeneralResponseEntity<>();
-        GeneralPaginationRequest paginationRequest = new GeneralPaginationRequest();
-        paginationRequest.setPageNumber(pageNo);
-        paginationRequest.setPageSize(pageSize);
-        paginationRequest.setValue(userId);
-        paginationRequest.setSortBy(sortBy);
+                                                                @RequestParam(defaultValue = "id") String sortBy) throws Exception {
         try {
-            List<Post> posts = postService.getPosts(paginationRequest);
-            generalResponseEntity.setInfo((Post) posts);
-            return ResponseEntity.ok(generalResponseEntity);
+            Page<Post> posts = postService.getPosts(pageNo, pageSize, sortBy);
+            return ResponseEntity.ok(posts);
         } catch (Exception ex) {
-            throw ex;
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -90,8 +83,10 @@ public class PostController {
             Post savedPost = postService.getPost(postId);
             generalResponseEntity.setInfo(savedPost);
             return ResponseEntity.ok(generalResponseEntity);
+        } catch (RecordNotFoundException ex) {
+            throw ex;
         } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
