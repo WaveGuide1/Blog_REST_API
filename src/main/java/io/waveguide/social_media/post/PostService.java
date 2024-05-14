@@ -5,11 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -42,7 +43,7 @@ public class PostService {
     }
 
     public List<Post> getPosts(GeneralPaginationRequest paginationRequest) throws Exception{
-        Pageable pageable = (Pageable) PageRequest.of(paginationRequest.getPageNumber(),
+        Pageable pageable = PageRequest.of(paginationRequest.getPageNumber(),
                 paginationRequest.getPageSize(), Sort.by(paginationRequest.getSortBy())
                         .descending());
         return postRepository.findByUserId(paginationRequest.getValue(), pageable);
