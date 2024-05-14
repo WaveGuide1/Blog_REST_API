@@ -1,81 +1,99 @@
 package io.waveguide.social_media.post;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.Assertions;
+
+import io.waveguide.social_media.exception.RecordNotFoundException;
+import io.waveguide.social_media.utils.GeneralPaginationRequest;
+import io.waveguide.social_media.utils.GeneralResponseEntity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks; import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-
+import org.springframework.http.ResponseEntity;
+import java.util.Collections; import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
-@WebMvcTest(value = PostController.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class PostControllerTest {
+class PostControllerTest {
 
-    private final MockMvc mockMvc;
+    @Mock
+    private PostService postService;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
-    @MockBean
-    private final PostService postService;
+    @InjectMocks
+    private PostController postController;
 
     @Test
-    public void testUpdateFailedValidation() throws Exception {
+    void testGetPosts() throws Exception {
 
-        UpdatePostRequest postRequest = new UpdatePostRequest();
-                postRequest.setPostId("");
-                postRequest.setTitle("Spring boot");
-                postRequest.setBody("Spring boot is awesome");
-                postRequest.setUserId("101");
-                postRequest.setPublished(true);
+        GeneralPaginationRequest paginationRequest = new GeneralPaginationRequest();
 
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/api/v1/posts/")
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(postRequest))
-                .accept(MediaType.APPLICATION_JSON);
+        when(postService.getPosts(any())).thenReturn(Collections.emptyList());
 
-        MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
-        MockHttpServletResponse response = mvcResult.getResponse();
-        Assertions.assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(), response.getStatus());
-        Assertions.assertEquals("{\"message\":\"PostId is required.\"}", response.getContentAsString());
+        ResponseEntity<GeneralResponseEntity<Post>> responseEntity = postController.getPosts(0, 0, "id", "userId");
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        verify(postService, times(1)).getPosts(any());
+
     }
 
     @Test
-    public void testUpdatePostNotFound() throws Exception {
-        UpdatePostRequest postRequest = new UpdatePostRequest();
-        postRequest.setPostId("1001");
-        postRequest.setTitle("Spring boot");
-        postRequest.setBody("Spring boot is awesome");
-        postRequest.setUserId("101");
-        postRequest.setPublished(true);
+    void testCreatePost() throws Exception {
 
-        when(postService.updatePost(any(UpdatePostRequest.class))).thenReturn(null);
+        CreatePostRequest request = new CreatePostRequest();
 
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/api/v1/posts/")
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(postRequest))
-                .accept(MediaType.APPLICATION_JSON);
+        when(postService.createPost(any())).thenReturn(new Post());
 
-        MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
-        MockHttpServletResponse response = mvcResult.getResponse();
-        Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
-        Assertions.assertEquals("{\"message\":\"PostId is required.\"}", response.getContentAsString());
+        ResponseEntity<GeneralResponseEntity<Post>> responseEntity = postController.createPost(request);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        verify(postService, times(1)).createPost(any());
+
     }
+
+    @Test
+    void testUpdatePost() throws Exception {
+
+        UpdatePostRequest request = new UpdatePostRequest();
+
+        when(postService.updatePost(any())).thenReturn(new Post());
+
+        ResponseEntity<GeneralResponseEntity<Post>> responseEntity = postController.updatePost(request);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        verify(postService, times(1)).updatePost(any());
+
+    }
+
+    @Test
+    void testGetPostBy() throws Exception {
+
+        String postId = "postId";
+
+        when(postService.getPost(any())).thenReturn(new Post());
+
+        ResponseEntity<GeneralResponseEntity<Post>> responseEntity = postController.getPost(postId);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        verify(postService, times(1)).getPost(any());
+
+    }
+
+    @Test
+    void testDeletePost() throws Exception {
+
+        String postId = "postId";
+
+        ResponseEntity<GeneralResponseEntity<Post>> responseEntity = postController.deletePost(postId);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        verify(postService, times(1)).deletePost(any());
+
+    }
+
 }

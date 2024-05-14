@@ -23,7 +23,7 @@ public class Post {
     private String title;
     private String body;
     private Boolean published;
-    private ObjectId userId;
+    private String userId;
     private LocalDateTime createAt;
     private LocalDateTime updatedAt;
 }

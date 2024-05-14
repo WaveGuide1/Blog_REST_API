@@ -28,8 +28,7 @@ public class PostController {
                                                                 @RequestParam(defaultValue = "0") Integer pageNo,
                                                                 @RequestParam(defaultValue = "10") Integer pageSize,
                                                                 @RequestParam(defaultValue = "id") String sortBy,
-                                                                @RequestParam(defaultValue = "0") String userId) {
-        Post post = new Post();
+                                                                @RequestParam(defaultValue = "0") String userId) throws Exception {
         GeneralResponseEntity<Post> generalResponseEntity = new GeneralResponseEntity<>();
         GeneralPaginationRequest paginationRequest = new GeneralPaginationRequest();
         paginationRequest.setPageNumber(pageNo);
@@ -41,7 +40,7 @@ public class PostController {
             generalResponseEntity.setInfo((Post) posts);
             return ResponseEntity.ok(generalResponseEntity);
         } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            throw ex;
         }
     }
 
