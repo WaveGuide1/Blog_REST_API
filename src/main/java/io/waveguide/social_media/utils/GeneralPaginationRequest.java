@@ -12,6 +12,5 @@ public class GeneralPaginationRequest {
 
     private Integer pageNumber;
     private Integer pageSize;
-    private String sortBy;
-    private String value;
+
 }

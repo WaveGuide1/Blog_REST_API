@@ -8,6 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks; import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import java.util.Collections; import java.util.List;
@@ -26,15 +29,14 @@ class PostControllerTest {
     @Test
     void testGetPosts() throws Exception {
 
-        GeneralPaginationRequest paginationRequest = new GeneralPaginationRequest();
 
-        when(postService.getPosts(any())).thenReturn(Collections.emptyList());
-
-        ResponseEntity<GeneralResponseEntity<Post>> responseEntity = postController.getPosts(0, 0, "id", "userId");
-
+        List<Post> postList = Collections.singletonList(new Post());
+        Page<Post> postPage = new PageImpl<>(postList, PageRequest.of(0, 10), 1);
+        when(postService.getPosts(anyInt(), anyInt(), anyString())).thenReturn(postPage);
+        ResponseEntity<Page<Post>> responseEntity = postController.getPosts(0, 10, "id");
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-
-        verify(postService, times(1)).getPosts(any());
+        assertEquals(postPage, responseEntity.getBody());
+        verify(postService, times(1)).getPosts(anyInt(), anyInt(), anyString());
 
     }
 
