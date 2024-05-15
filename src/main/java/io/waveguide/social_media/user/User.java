@@ -18,10 +18,11 @@ import java.time.LocalDateTime;
 public class User {
 
     @Id
-    private ObjectId userId;
+    private String userId;
 
     private String fullName;
     private String username;
+    private String email;
     private String password;
     private Byte role;
     private LocalDateTime createAt;
