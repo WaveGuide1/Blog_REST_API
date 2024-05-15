@@ -13,7 +13,6 @@ import java.util.Objects;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<GeneralResponseEntity<String>> validationException(MethodArgumentNotValidException notValidException){
 
@@ -24,12 +23,18 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(responseEntity, HttpStatus.BAD_REQUEST);
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(RecordNotFoundException.class)
     public ResponseEntity<GeneralResponseEntity<String>> recordNotFoundException(RecordNotFoundException exception){
 
         GeneralResponseEntity<String> responseEntity = new GeneralResponseEntity<>();
         responseEntity.setMessage(exception.message);
         return new ResponseEntity<>(responseEntity, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UserAlreadyExistException.class)
+    public ResponseEntity<GeneralResponseEntity<String>> userAlreadyExist(UserAlreadyExistException exception){
+        GeneralResponseEntity<String> responseEntity = new GeneralResponseEntity<>();
+        responseEntity.setMessage(exception.getMessage());
+        return new ResponseEntity<>(responseEntity, HttpStatus.CONFLICT);
     }
 }
