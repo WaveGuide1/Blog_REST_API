@@ -37,4 +37,11 @@ public class GlobalExceptionHandler {
         responseEntity.setMessage(exception.getMessage());
         return new ResponseEntity<>(responseEntity, HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(AuthenticationFailedException.class)
+    public ResponseEntity<GeneralResponseEntity<String>> authFailed(AuthenticationFailedException exception){
+        GeneralResponseEntity<String> responseEntity = new GeneralResponseEntity<>();
+        responseEntity.setMessage(exception.getMessage());
+        return new ResponseEntity<>(responseEntity, HttpStatus.UNAUTHORIZED);
+    }
 }
