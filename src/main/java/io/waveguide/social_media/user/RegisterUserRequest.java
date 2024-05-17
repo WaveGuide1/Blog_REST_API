@@ -2,34 +2,34 @@ package io.waveguide.social_media.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 public class RegisterUserRequest {
 
-    @NotBlank(message = "Name is required")
+    @NotBlank(message = "Full name required parameter.")
     private String fullName;
 
-    @NotBlank(message = "Username is required")
-    private String username;
+    @Email(message = "User name required parameter.")
+    private String userName;
 
-    @Email(message = "Provide a valid email")
-    private String email;
-
-    @NotBlank(message = "Password is required")
+    @NotBlank(message = "Password required parameter.")
     private String password;
 
-    private Integer role;
+    @NotNull(message = "Role required parameter.")
+    private List<String> roles;
 
     @Override
     public String toString() {
         return "RegisterUserRequest{" +
                 "fullName='" + fullName + '\'' +
-                ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", role=" + role +
+                ", userName='" + userName + '\'' +
+                ", role=" + roles +
                 '}';
     }
 }
