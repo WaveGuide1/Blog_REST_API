@@ -1,38 +1,70 @@
 package io.waveguide.social_media.user;
 
-import lombok.*;
-import org.bson.types.ObjectId;
+import io.waveguide.social_media.token.Token;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@Document
-public class User {
+@Document(collection = "users")
+public class User implements UserDetails {
 
-    @Id
-    private String userId;
+  @Id
+  private String id;
+  private String firstname;
+  private String lastname;
+  private String email;
+  private String password;
 
-    private String fullName;
+  private Role role;
 
-    private String username;
+  @DBRef
+  private List<Token> tokens;
 
-    private String password;
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return role.getAuthorities();
+  }
 
-    private List<String> roles;
+  @Override
+  public String getPassword() {
+    return password;
+  }
 
-    private Integer isSocialRegister;
+  @Override
+  public String getUsername() {
+    return email;
+  }
 
-    private Integer otp;
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
 
-    private Integer isAccountVerify;
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
 
-    private LocalDateTime createdAt;
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
 
-    private LocalDateTime updatedAt;
+  @Override
+  public boolean isEnabled() {
+    return true;
+  }
 }
