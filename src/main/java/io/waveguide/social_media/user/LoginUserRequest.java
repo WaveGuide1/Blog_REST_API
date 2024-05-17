@@ -9,17 +9,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoginUserRequest {
 
-    @NotBlank(message = "Name is required")
-    private String fullName;
-
-    @NotBlank(message = "Username is required")
+    @NotBlank(message = "User name is required parameter.")
     private String username;
 
-    @Email(message = "Provide a valid email")
-    private String email;
-
-    @NotBlank(message = "Password is required")
+    @NotBlank(message = "Password is required parameter.")
     private String password;
 
-    private Integer role;
+    private int isSocialRegister;
+
+    @Override
+    public String toString() {
+        return "LoginUserRequest{" +
+                "userName='" + username + '\'' +
+                ", isSocialRegister=" + isSocialRegister +
+                '}';
+    }
 }

@@ -1,19 +1,17 @@
 package io.waveguide.social_media.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@ToString
 @Document
 public class User {
 
@@ -21,10 +19,20 @@ public class User {
     private String userId;
 
     private String fullName;
+
     private String username;
-    private String email;
+
     private String password;
-    private Integer role;
-    private LocalDateTime createAt;
+
+    private List<String> roles;
+
+    private Integer isSocialRegister;
+
+    private Integer otp;
+
+    private Integer isAccountVerify;
+
+    private LocalDateTime createdAt;
+
     private LocalDateTime updatedAt;
 }
