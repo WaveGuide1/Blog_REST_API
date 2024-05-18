@@ -1,5 +1,6 @@
 package io.waveguide.social_media.auth;
 
+import io.waveguide.social_media.exception.GeneralAppException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -23,13 +24,22 @@ public class AuthenticationController {
   public ResponseEntity<AuthenticationResponse> register(
       @Valid @RequestBody RegisterRequest request
   ) {
-    return ResponseEntity.ok(service.register(request));
+    try {
+      return ResponseEntity.ok(service.register(request));
+    } catch (Exception e){
+      throw new GeneralAppException("Something went wrong");
+    }
   }
-  @PostMapping("/authenticate")
+  @PostMapping("/login")
   public ResponseEntity<AuthenticationResponse> authenticate(
       @Valid @RequestBody AuthenticationRequest request
   ) {
-    return ResponseEntity.ok(service.authenticate(request));
+    try {
+      return ResponseEntity.ok(service.authenticate(request));
+    } catch (Exception e){
+      throw new GeneralAppException("Something went wrong");
+    }
+
   }
 
   @PostMapping("/refresh-token")

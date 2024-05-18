@@ -1,4 +1,4 @@
-package io.waveguide.social_media.config;
+package io.waveguide.social_media.utils;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
@@ -12,19 +12,18 @@ import io.swagger.v3.oas.annotations.servers.Server;
 @OpenAPIDefinition(
         info = @Info(
                 contact = @Contact(
-                        name = "Waveguide",
+                        name = "WaveGuide",
                         email = "barthalaekwe@gmail.com"
                 ),
-                description = "OpenApi documentation for Blog Rest API",
-                title = "OpenApi specification - Waveguide",
+                description = "OpenAPI Documentation for Blog Rest API",
+                title = "OpenAPI Spec --- WaveGuide",
                 version = "1.0"
         ),
         servers = {
                 @Server(
-                        description = "Local ENV",
+                        description = "LOCAL ENVIRONMENT",
                         url = "http://localhost:8080"
-                ),
-
+                )
         },
         security = {
                 @SecurityRequirement(
@@ -34,7 +33,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
 )
 @SecurityScheme(
         name = "bearerAuth",
-        description = "JWT auth description",
+        description = "JWT",
         scheme = "bearer",
         type = SecuritySchemeType.HTTP,
         bearerFormat = "JWT",

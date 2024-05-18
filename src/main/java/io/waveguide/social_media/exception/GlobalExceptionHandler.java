@@ -44,4 +44,11 @@ public class GlobalExceptionHandler {
         responseEntity.setMessage(exception.getMessage());
         return new ResponseEntity<>(responseEntity, HttpStatus.UNAUTHORIZED);
     }
+
+    @ExceptionHandler(GeneralAppException.class)
+    public ResponseEntity<GeneralResponseEntity<String>> generalAppException(GeneralAppException exception){
+        GeneralResponseEntity<String> responseEntity = new GeneralResponseEntity<>();
+        responseEntity.setMessage(exception.getMessage());
+        return new ResponseEntity<>(responseEntity, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
