@@ -18,8 +18,7 @@ public class PostResponse {
 
     private String title;
     private String body;
-    private Boolean published;
-    private ObjectId userId;
+
     private LocalDateTime createAt;
     private LocalDateTime updatedAt;
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -18,11 +19,16 @@ import java.time.LocalDateTime;
 public class Comment {
 
     @Id
-    private ObjectId commentId;
+    private String commentId;
 
     private String message;
-    private ObjectId postId;
-    private ObjectId userId;
+
+    @DBRef
+    private String postId;
+
+    @DBRef
+    private String userId;
+
     private LocalDateTime createAt;
     private LocalDateTime updatedAt;
 }

@@ -13,6 +13,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.security.Principal;
 import java.util.Collections; import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -45,13 +47,15 @@ class PostControllerTest {
 
         CreatePostRequest request = new CreatePostRequest();
 
-        when(postService.createPost(any())).thenReturn(new Post());
+        Principal principal = mock(Principal.class);
 
-        ResponseEntity<GeneralResponseEntity<Post>> responseEntity = postController.createPost(request);
+        when(postService.createPost(any(CreatePostRequest.class), any(Principal.class))).thenReturn(new Post());
+
+        ResponseEntity<GeneralResponseEntity<Post>> responseEntity = postController.createPost(request, principal);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
-        verify(postService, times(1)).createPost(any());
+        verify(postService, times(1)).createPost(any(CreatePostRequest.class), any(Principal.class));
 
     }
 
@@ -60,13 +64,19 @@ class PostControllerTest {
 
         UpdatePostRequest request = new UpdatePostRequest();
 
-        when(postService.updatePost(any())).thenReturn(new Post());
+        Principal principal = mock(Principal.class);
 
-        ResponseEntity<GeneralResponseEntity<Post>> responseEntity = postController.updatePost(request);
+        String postId = "101";
+
+        when(postService.updatePost(any(UpdatePostRequest.class),eq(postId), any(Principal.class))).thenReturn(new Post());
+
+        ResponseEntity<GeneralResponseEntity<Post>> responseEntity = postController.updatePost(request, postId, principal);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
-        verify(postService, times(1)).updatePost(any());
+        verify(postService, times(1)).updatePost(any(UpdatePostRequest.class), eq(postId), any(Principal.class
+
+        ));
 
     }
 
