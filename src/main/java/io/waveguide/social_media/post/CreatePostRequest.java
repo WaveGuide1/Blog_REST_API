@@ -22,9 +22,4 @@ public class CreatePostRequest {
     @NotBlank(message = "Post body is required")
     private String body;
 
-    private Boolean published;
-
-    @NotBlank(message = "UserId is required")
-    private String userId;
-
 }

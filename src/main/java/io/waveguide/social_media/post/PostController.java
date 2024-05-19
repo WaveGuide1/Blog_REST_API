@@ -1,5 +1,6 @@
 package io.waveguide.social_media.post;
 
+import io.waveguide.social_media.exception.AuthenticationFailedException;
 import io.waveguide.social_media.exception.RecordNotFoundException;
 import io.waveguide.social_media.utils.GeneralPaginationRequest;
 import io.waveguide.social_media.utils.GeneralResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -39,33 +41,33 @@ public class PostController {
 
     @PostMapping("/")
     public ResponseEntity<GeneralResponseEntity<Post>> createPost(@Valid
-                                                                  @RequestBody CreatePostRequest request){
+                                                                  @RequestBody CreatePostRequest request,
+                                                                  Principal principal) throws Exception {
         GeneralResponseEntity<Post> generalResponseEntity = new GeneralResponseEntity<>();
-        try {
-            Post createdPost = postService.createPost(request);
+
+            Post createdPost = postService.createPost(request, principal);
             generalResponseEntity.setMessage("Post created successfully");
             generalResponseEntity.setInfo(createdPost);
             return ResponseEntity.ok(generalResponseEntity);
-        }catch (Exception ex){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+
 
     }
 
-    @PutMapping("/")
+    @PutMapping("/{postId}")
     public ResponseEntity<GeneralResponseEntity<Post>> updatePost(@Valid
-                                                                  @RequestBody UpdatePostRequest request) {
+                                                                  @RequestBody UpdatePostRequest request,
+                                                                  String postId, Principal principal) {
 
         GeneralResponseEntity<Post> generalResponseEntity = new GeneralResponseEntity<>();
         try {
-            Post updatedPost = postService.updatePost(request);
+            Post updatedPost = postService.updatePost(request, postId, principal);
             if (ObjectUtils.isEmpty(updatedPost)) throw new RecordNotFoundException("Not Found");
 
             generalResponseEntity.setMessage("Post updated successfully");
             generalResponseEntity.setInfo(updatedPost);
             return ResponseEntity.ok(generalResponseEntity);
 
-        } catch (RecordNotFoundException ex) {
+        } catch (RecordNotFoundException | AuthenticationFailedException ex) {
             throw ex;
 
         } catch (Exception ex) {

@@ -14,11 +14,11 @@ import java.time.LocalDateTime;
 public class CommentResponse {
 
     @Id
-    private ObjectId commentId;
+    private String commentId;
 
     private String message;
-    private ObjectId postId;
-    private ObjectId userId;
+    private String postId;
+    private String userId;
     private LocalDateTime createAt;
     private LocalDateTime updatedAt;
 }
