@@ -1,5 +1,6 @@
 package io.waveguide.social_media.comment;
 
+import io.waveguide.social_media.exception.AuthenticationFailedException;
 import io.waveguide.social_media.exception.GeneralAppException;
 import io.waveguide.social_media.exception.RecordNotFoundException;
 import io.waveguide.social_media.post.Post;
@@ -29,6 +30,7 @@ public class CommentService {
         Comment comment = new Comment();
         BeanUtils.copyProperties(request, comment);
         comment.setUserId(user.getId());
+        comment.setPostId(post.getPostId());
         comment.setCreateAt(LocalDateTime.now());
         return commentRepository.save(comment);
     }
@@ -38,9 +40,13 @@ public class CommentService {
         var oldComment = commentRepository.findByCommentIdAndIsDeletedFalse(commentId)
                 .orElseThrow(() -> new RecordNotFoundException("Comment not found"));
         if(!oldComment.getUserId().equals(user.getId()))
-            throw new GeneralAppException("Invalid Request");
+            throw new AuthenticationFailedException("Invalid Request");
         Comment comment = new Comment();
         BeanUtils.copyProperties(request, comment);
+        comment.setCommentId(oldComment.getCommentId());
+        comment.setUserId(oldComment.getUserId());
+        comment.setPostId(oldComment.getPostId());
+        comment.setCreateAt(oldComment.getCreateAt());
         comment.setUpdatedAt(LocalDateTime.now());
         return commentRepository.save(comment);
     }
@@ -50,7 +56,7 @@ public class CommentService {
         var oldComment = commentRepository.findByCommentIdAndIsDeletedFalse(commentId)
                 .orElseThrow(() -> new RecordNotFoundException("Comment not found"));
         if(!oldComment.getUserId().equals(user.getId()))
-            throw new GeneralAppException("Invalid Request");
+            throw new AuthenticationFailedException("Invalid Request");
         oldComment.setDeleted(true);
         commentRepository.save(oldComment);
     }

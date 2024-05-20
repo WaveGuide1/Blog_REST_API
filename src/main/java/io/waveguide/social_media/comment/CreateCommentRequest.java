@@ -18,10 +18,4 @@ public class CreateCommentRequest {
 
     @NotBlank(message = "Comment message is required")
     private String message;
-
-    @NotBlank(message = "PostId is required")
-    private ObjectId postId;
-
-    @NotBlank(message = "UserId is required")
-    private ObjectId userId;
 }
