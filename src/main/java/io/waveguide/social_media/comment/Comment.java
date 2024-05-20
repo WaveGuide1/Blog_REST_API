@@ -29,6 +29,8 @@ public class Comment {
     @DBRef
     private String userId;
 
+    private boolean isDeleted = false;
+
     private LocalDateTime createAt;
     private LocalDateTime updatedAt;
 }
