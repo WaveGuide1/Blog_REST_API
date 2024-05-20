@@ -1,5 +1,6 @@
 package io.waveguide.social_media.comment;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,12 +24,11 @@ public class Comment {
 
     private String message;
 
-    @DBRef
     private String postId;
 
-    @DBRef
     private String userId;
 
+    @JsonIgnore
     private boolean isDeleted = false;
 
     private LocalDateTime createAt;

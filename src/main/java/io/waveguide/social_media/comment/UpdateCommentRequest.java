@@ -16,15 +16,6 @@ import java.time.LocalDateTime;
 @Builder
 public class UpdateCommentRequest {
 
-    @NotBlank(message = "CommentId is required")
-    private ObjectId commentId;
-
     @NotBlank(message = "Comment message is required")
     private String message;
-
-    @NotBlank(message = "PostId is required")
-    private ObjectId postId;
-
-    @NotBlank(message = "UserId is required")
-    private ObjectId userId;
 }
