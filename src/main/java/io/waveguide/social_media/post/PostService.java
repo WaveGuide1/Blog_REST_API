@@ -38,7 +38,7 @@ public class PostService {
     public Post updatePost(UpdatePostRequest request, String postId, Principal principal) throws Exception{
         var user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
 
-        Post post = postRepository.findByPostId(postId);
+        Post post = postRepository.findByPostIdAndIsDeletedFalse(postId);
         if(ObjectUtils.isEmpty(post)) throw new RecordNotFoundException("Not Found");
         if(!post.getUserId().equals(user.getId())) throw new AuthenticationFailedException("Invalid Request");
         BeanUtils.copyProperties(request, post);
@@ -47,11 +47,14 @@ public class PostService {
     }
 
     public void deletePost(String postId) throws Exception {
-        postRepository.deleteByPostId(postId);
+        Post post = postRepository.findByPostId(postId);
+        if(ObjectUtils.isEmpty(post)) throw new RecordNotFoundException("Not found");
+        post.setDeleted(true);
+        postRepository.save(post);
     }
 
     public Post getPost(String postId) throws Exception {
-        Post savedPost = postRepository.findByPostId(postId);
+        Post savedPost = postRepository.findByPostIdAndIsDeletedFalse(postId);
         if(savedPost == null)
             throw new RecordNotFoundException("No Record Found");
         return savedPost;
@@ -59,6 +62,6 @@ public class PostService {
 
     public Page<Post> getPosts(int pageNo, int pageSize, String sortBy) throws Exception{
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
-        return postRepository.findAll(pageable);
+        return postRepository.findByPostIdAndIsDeletedFalse(pageable);
     }
 }

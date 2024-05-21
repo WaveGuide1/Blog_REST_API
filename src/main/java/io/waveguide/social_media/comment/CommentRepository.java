@@ -10,10 +10,6 @@ import java.util.Optional;
 
 public interface CommentRepository extends MongoRepository<Comment, String> {
 
-
-    @Query("{'postId' : ?0, 'isDeleted': false}")
-    Page<Comment> findByPostIdAndIsDeletedFalse(String postId, Pageable pageable);
-
     @Query("{'commentId' : ?0, 'isDeleted': false}")
     Optional<Comment> findByCommentIdAndIsDeletedFalse(String commentId);
 }

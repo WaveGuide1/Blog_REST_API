@@ -95,12 +95,13 @@ public class PostController {
     @DeleteMapping("/{postId}")
     public ResponseEntity<GeneralResponseEntity<Post>> deletePost(@Valid
                                                                   @PathVariable String postId) {
-        Post post = new Post();
         GeneralResponseEntity<Post> generalResponseEntity = new GeneralResponseEntity<>();
         try {
             postService.deletePost(postId);
             generalResponseEntity.setMessage("Post deleted successfully");
             return ResponseEntity.ok(generalResponseEntity);
+        } catch (RecordNotFoundException ex) {
+            throw ex;
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
