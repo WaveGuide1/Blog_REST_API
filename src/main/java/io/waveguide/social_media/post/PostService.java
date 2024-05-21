@@ -1,10 +1,9 @@
 package io.waveguide.social_media.post;
 
+import io.waveguide.social_media.comment.CommentService;
 import io.waveguide.social_media.exception.AuthenticationFailedException;
-import io.waveguide.social_media.exception.GeneralAppException;
 import io.waveguide.social_media.exception.RecordNotFoundException;
 import io.waveguide.social_media.user.User;
-import io.waveguide.social_media.utils.GeneralPaginationRequest;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.BeanUtils;
@@ -25,6 +24,7 @@ import java.util.List;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final CommentService commentService;
 
     public Post createPost(CreatePostRequest request, Principal principal) throws Exception{
         var user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();

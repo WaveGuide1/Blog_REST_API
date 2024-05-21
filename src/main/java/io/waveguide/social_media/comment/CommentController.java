@@ -18,17 +18,15 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/{postId}")
-    public ResponseEntity<GeneralResponseEntity<Comment>> addComment(CreateCommentRequest request, String postId, Principal principal){
+    public ResponseEntity<GeneralResponseEntity<Comment>> addComment(CreateCommentRequest request, String postId, Principal principal) throws Exception {
         GeneralResponseEntity<Comment> responseEntity = new GeneralResponseEntity<>();
         try {
             Comment comment = commentService.createComment(request, postId, principal);
             responseEntity.setMessage("You commented");
             responseEntity.setInfo(comment);
             return ResponseEntity.ok(responseEntity);
-        } catch (RecordNotFoundException e){
-            throw e;
         } catch (Exception e){
-            throw new GeneralAppException("Something went wrong");
+            throw e;
         }
     }
 
