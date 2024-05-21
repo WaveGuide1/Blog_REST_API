@@ -18,20 +18,24 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/{postId}")
-    public ResponseEntity<GeneralResponseEntity<Comment>> addComment(CreateCommentRequest request, String postId, Principal principal) throws Exception {
+    public ResponseEntity<GeneralResponseEntity<Comment>> addComment(@RequestBody CreateCommentRequest request,
+                                                                     @PathVariable String postId, Principal principal) {
         GeneralResponseEntity<Comment> responseEntity = new GeneralResponseEntity<>();
         try {
             Comment comment = commentService.createComment(request, postId, principal);
             responseEntity.setMessage("You commented");
             responseEntity.setInfo(comment);
             return ResponseEntity.ok(responseEntity);
-        } catch (Exception e){
+        } catch (RecordNotFoundException e){
             throw e;
+        } catch (Exception e){
+            throw new GeneralAppException("Something went wrong");
         }
     }
 
     @PatchMapping("/{commentId}")
-    public ResponseEntity<GeneralResponseEntity<Comment>>updateComment(UpdateCommentRequest request, String commentId, Principal principal){
+    public ResponseEntity<GeneralResponseEntity<Comment>>updateComment(@RequestBody UpdateCommentRequest request,
+                                                                       @PathVariable String commentId, Principal principal){
         GeneralResponseEntity<Comment> responseEntity = new GeneralResponseEntity<>();
         try {
             Comment comment = commentService.updateComment(request, commentId, principal);
@@ -46,9 +50,12 @@ public class CommentController {
     }
 
     @DeleteMapping("/{commentId}")
-    public void deleteComment(String commentId, Principal principal){
+    public ResponseEntity<GeneralResponseEntity<Comment>> deleteComment(@PathVariable String commentId, Principal principal){
+        GeneralResponseEntity<Comment> responseEntity = new GeneralResponseEntity<>();
         try {
             commentService.deleteComment(commentId, principal);
+            responseEntity.setMessage("Comment deleted successfully");
+            return ResponseEntity.ok(responseEntity);
         }catch (RecordNotFoundException | AuthenticationFailedException e){
             throw e;
         } catch (Exception e){
