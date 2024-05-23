@@ -11,7 +11,10 @@ import org.springframework.stereotype.Component;
 public class GeneralLogging {
 
 
-    @Pointcut("execution(* io.waveguide.social_media.post.*.*(..))")
+    @Pointcut("execution(* io.waveguide.social_media.post.*.*(..)) ||" +
+            "execution(* io.waveguide.social_media.comment.*.*(..)) ||" +
+            "execution(* io.waveguide.social_media.user.*.*(..)) ||" +
+            "execution(* io.waveguide.social_media.auth.*.*(..))")
     public void loggingPointcut(){}
 
     @Before("loggingPointcut()")

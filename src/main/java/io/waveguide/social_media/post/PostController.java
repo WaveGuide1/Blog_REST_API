@@ -26,6 +26,7 @@ public class PostController {
 
     private final PostService postService;
 
+    // Get all post
     @GetMapping("/")
     public ResponseEntity<Page<Post>> getPosts(@Valid
                                                                 @RequestParam(defaultValue = "0") Integer pageNo,
@@ -39,6 +40,7 @@ public class PostController {
         }
     }
 
+    // Add a post
     @PostMapping("/")
     public ResponseEntity<GeneralResponseEntity<Post>> createPost(@Valid
                                                                   @RequestBody CreatePostRequest request,
@@ -53,6 +55,7 @@ public class PostController {
 
     }
 
+    // Update a post
     @PutMapping("/{postId}")
     public ResponseEntity<GeneralResponseEntity<Post>> updatePost(@Valid
                                                                   @RequestBody UpdatePostRequest request,
@@ -76,6 +79,7 @@ public class PostController {
 
     }
 
+    // Get a single post
     @GetMapping("/{postId}")
     public ResponseEntity<GeneralResponseEntity<Post>> getPost(@Valid
                                                                   @PathVariable String postId) {
@@ -92,6 +96,7 @@ public class PostController {
         }
     }
 
+    // Delete a post (False delete)
     @DeleteMapping("/{postId}")
     public ResponseEntity<GeneralResponseEntity<Post>> deletePost(@Valid
                                                                   @PathVariable String postId) {
