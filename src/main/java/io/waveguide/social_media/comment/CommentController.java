@@ -17,6 +17,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
+    // Comment on a post
     @PostMapping("/{postId}")
     public ResponseEntity<GeneralResponseEntity<Comment>> addComment(@RequestBody CreateCommentRequest request,
                                                                      @PathVariable String postId, Principal principal) {
@@ -33,6 +34,7 @@ public class CommentController {
         }
     }
 
+    // Update a comment
     @PatchMapping("/{commentId}")
     public ResponseEntity<GeneralResponseEntity<Comment>>updateComment(@RequestBody UpdateCommentRequest request,
                                                                        @PathVariable String commentId, Principal principal){
@@ -49,6 +51,7 @@ public class CommentController {
         }
     }
 
+    // Delete a comment (False delete)
     @DeleteMapping("/{commentId}")
     public ResponseEntity<GeneralResponseEntity<Comment>> deleteComment(@PathVariable String commentId, Principal principal){
         GeneralResponseEntity<Comment> responseEntity = new GeneralResponseEntity<>();

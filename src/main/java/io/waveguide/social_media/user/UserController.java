@@ -19,6 +19,7 @@ public class UserController {
 
     private final UserService service;
 
+    // Change password controller
     @PatchMapping("/change/password")
     public ResponseEntity<?> changePassword(
           @Valid @RequestBody ChangePasswordRequest request,

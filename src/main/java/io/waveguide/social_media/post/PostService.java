@@ -26,6 +26,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final CommentService commentService;
 
+    // Create post
     public Post createPost(CreatePostRequest request, Principal principal) throws Exception{
         var user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         Post post = new Post();
@@ -35,6 +36,7 @@ public class PostService {
         return postRepository.save(post);
     }
 
+    // Update a post
     public Post updatePost(UpdatePostRequest request, String postId, Principal principal) throws Exception{
         var user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
 
@@ -46,6 +48,7 @@ public class PostService {
         return postRepository.save(post);
     }
 
+    // Delete a post (False delete)
     public void deletePost(String postId) throws Exception {
         Post post = postRepository.findByPostId(postId);
         if(ObjectUtils.isEmpty(post)) throw new RecordNotFoundException("Not found");
@@ -53,6 +56,7 @@ public class PostService {
         postRepository.save(post);
     }
 
+    // Get a single post
     public Post getPost(String postId) throws Exception {
         Post savedPost = postRepository.findByPostIdAndIsDeletedFalse(postId);
         if(savedPost == null)
@@ -60,6 +64,7 @@ public class PostService {
         return savedPost;
     }
 
+    // Get all post
     public Page<Post> getPosts(int pageNo, int pageSize, String sortBy) throws Exception{
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
         return postRepository.findByPostIdAndIsDeletedFalse(pageable);
