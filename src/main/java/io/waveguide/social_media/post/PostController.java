@@ -64,7 +64,7 @@ public class PostController {
         GeneralResponseEntity<Post> generalResponseEntity = new GeneralResponseEntity<>();
         try {
             Post updatedPost = postService.updatePost(request, postId, principal);
-            if (ObjectUtils.isEmpty(updatedPost)) throw new RecordNotFoundException("Not Found");
+            if (ObjectUtils.isEmpty(updatedPost)) throw new RecordNotFoundException("Post Not Found");
 
             generalResponseEntity.setMessage("Post updated successfully");
             generalResponseEntity.setInfo(updatedPost);

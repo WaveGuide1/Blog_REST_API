@@ -24,13 +24,13 @@ public class CommentController {
         GeneralResponseEntity<Comment> responseEntity = new GeneralResponseEntity<>();
         try {
             Comment comment = commentService.createComment(request, postId, principal);
-            responseEntity.setMessage("You commented");
+            responseEntity.setMessage("You commented on this post");
             responseEntity.setInfo(comment);
             return ResponseEntity.ok(responseEntity);
         } catch (RecordNotFoundException e){
             throw e;
         } catch (Exception e){
-            throw new GeneralAppException("Something went wrong");
+            throw new GeneralAppException("Server not responding. Try again later");
         }
     }
 
@@ -47,7 +47,7 @@ public class CommentController {
         } catch (RecordNotFoundException | AuthenticationFailedException e){
             throw e;
         } catch (Exception e){
-            throw new GeneralAppException("Something went wrong");
+            throw new GeneralAppException("Server not responding. Try again later");
         }
     }
 
@@ -62,7 +62,7 @@ public class CommentController {
         }catch (RecordNotFoundException | AuthenticationFailedException e){
             throw e;
         } catch (Exception e){
-            throw new GeneralAppException("Something went wrong");
+            throw new GeneralAppException("Server not responding. Try again later");
         }
     }
 }
