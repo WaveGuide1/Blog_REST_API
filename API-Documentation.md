@@ -50,11 +50,11 @@
 - **Endpoint:** `POST /api/v1/auth/refresh-token`
 - **Request Body:**
 ```
-{}
+
 ```
 - **Successful Response (Http Status Code: 200 OK)**
 ```
-{}
+
 ```
 #### 4. Change Password API
 - **Endpoint:** `PATCH /api/v1/users/change/password`
