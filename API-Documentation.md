@@ -295,6 +295,6 @@ string
 - **Successful Response (Http Status Code: 200 Ok)**
 ```
 {
-  "message": "string"
+  "messages": "string"
 }
 ```
